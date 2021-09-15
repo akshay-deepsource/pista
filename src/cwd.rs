@@ -8,15 +8,12 @@ pub fn cwd() -> Option<colored::ColoredString> {
     let home = env::var("HOME").unwrap();
     let tilde_expand = env::var("EXPAND_TILDE").unwrap_or("0".into());
 
-    match tilde_expand.as_ref() {
-        "0" => {
-            let home_dir = &home.clone();
-            let home_dir_ext = format!("{}{}", home_dir, "/");
-            if (&path == home_dir) || *(&path.starts_with(&home_dir_ext)) {
-                path = path.replacen(&home_dir[..], "~", 1);
-            }
+    if let "0" = tilde_expand.as_ref() {
+        let home_dir = &home.clone();
+        let home_dir_ext = format!("{}{}", home_dir, "/");
+        if (&path == home_dir) || *(&path.starts_with(&home_dir_ext)) {
+            path = path.replacen(&home_dir[..], "~", 1);
         }
-        _ => {}
     };
 
     let cwd_shorten = env::var("SHORTEN_CWD").unwrap_or("1".into());
